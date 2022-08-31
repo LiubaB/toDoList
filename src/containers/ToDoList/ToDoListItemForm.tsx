@@ -3,10 +3,11 @@ import dayjs, { Dayjs } from 'dayjs';
 import { Box, TextField, Button, FormControl, Stack }  from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { Task, NewTask } from './types';
+import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
+import { formatDate } from 'src/helpers/dateHelper';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { tasks, addTaskAsync, editTaskAsync } from 'src/redux/tasksSlice';
+import { Task, NewTask } from './types';
 
 const defaultValues = {description: '', createdAt: null, dueDate: null};
 
@@ -29,15 +30,16 @@ const ToDoListItemForm = ({
   };
 
   const handleDateChange = (date: Dayjs | null) => {
-    setValues({...values, dueDate: dayjs(date)});
+    setValues({...values, dueDate: formatDate(date)});
   };
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const isTaskExist = tasksList.find((task) => task.description === values.description);
+    const isTaskExists = tasksList.find((task) => task.description === values.description);
+    const isValidationError = isTaskExists && !isEdit;
 
-    if(!isTaskExist) {
+    if(!isValidationError) {
       isEdit
         ? dispatch(editTaskAsync({...values, id: initialValues?.id || ''}))
         : dispatch(addTaskAsync(values))
@@ -79,13 +81,15 @@ const ToDoListItemForm = ({
           />
         </FormControl>
         <FormControl sx={{mb: 2}} fullWidth>
-          <DateTimePicker
+          <DesktopDateTimePicker
             label="Due Date"
-            inputFormat="MMM D, YYYY h:mm A"
             value={values.dueDate}
+            minDate={dayjs().add(1, 'day')}
+            minutesStep={30}
+            disablePast
+            disableHighlightToday
             onChange={handleDateChange}
             renderInput={(params) => <TextField {...params} />}
-            disablePast
           />
         </FormControl>
         <Stack spacing={2} direction="row">
