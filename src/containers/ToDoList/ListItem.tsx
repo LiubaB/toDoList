@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Card, ListItem, ListItemText, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { formatDate } from 'src/helpers/dateHelper';
 import { deleteTaskAsync } from 'src/redux/tasksSlice';
 import { useAppDispatch } from 'src/redux/hooks';
 import { Task } from './types';
@@ -41,10 +40,10 @@ const ListItemComponent = ({id, description, createdAt, dueDate}: Task) => {
             sx={{maxWidth: "400px"}}
             primary={description}
             secondary={
-              <p>
-                Created At: {formatDate(createdAt)} <br />
-                Due Date: {formatDate(dueDate)}
-              </p>
+              <>
+                Created At: {createdAt || '—'} <br />
+                Due Date: {dueDate || '—'}
+              </>
             }
           />
         </ListItem>
