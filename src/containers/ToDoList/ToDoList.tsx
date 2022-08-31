@@ -17,7 +17,7 @@ const ToDoList = () => {
       {tasksList.length ? (
         <List>
           {tasksList.map((task) => (
-            <ListItem {...task} />
+            <ListItem key={task.id} {...task} />
           ))}
         </List>
       ) : (
