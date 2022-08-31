@@ -1,14 +1,12 @@
-import { Dayjs } from 'dayjs';
-
 export interface Task {
   id: string;
   description: string;
-  dueDate: Dayjs | null;
-  createdAt: Dayjs | null;
+  dueDate: string | null;
+  createdAt: string | null;
 }
 
 export interface NewTask {
   description: string;
-  dueDate: Dayjs | null;
-  createdAt: Dayjs | null;
+  dueDate: string | null;
+  createdAt: string | null;
 }
