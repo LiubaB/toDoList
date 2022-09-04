@@ -11,6 +11,10 @@ const ListItemComponent = ({id, description, createdAt, dueDate}: Task) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
+  const toggleIsEdit = () => {
+    setIsEdit(current => !current);
+  }
+
   const handleDeleteTask = (taskId: string) => {
     dispatch(deleteTaskAsync(taskId))
   }
@@ -21,13 +25,13 @@ const ListItemComponent = ({id, description, createdAt, dueDate}: Task) => {
         <ToDoListItemForm
           isEdit
           initialValues={{id, description, createdAt, dueDate}}
-          callback={() => setIsEdit(false)}
+          callback={toggleIsEdit}
         />
       ) : (
         <ListItem
           secondaryAction={
             <>
-              <IconButton aria-label="edit" onClick={() => setIsEdit(true)}>
+              <IconButton aria-label="edit" onClick={toggleIsEdit}>
                 <EditIcon />
               </IconButton>
               <IconButton aria-label="delete" onClick={() => handleDeleteTask(id)}>
